@@ -1,22 +1,25 @@
 <template>
   <div>
     <v-text-field
+      class="test-text-field-input"
       outlined
-      v-model="input_value"
+      height="54"
+      hint="Enter your email"
+      v-model="value"
+      :error="error"
       @focus="is_Focused = true"
       @blur="is_Focused = false"
-      v-on:update:error="error = $event"
+      v-on:update:error="error_event = $event"
       :rules="rules"
       counter="254"
       label="Email*"
     >
-      <v-icon v-if="this.error === false && is_Focused === false"
+      <v-icon v-if="this.setError === false && value !== ''"
               slot="append"
               color="green">
         mdi-check-circle-outline
       </v-icon>
-      asdfasdf
-      <v-icon v-else-if="this.error === true && is_Focused === false"
+      <v-icon v-else-if="this.setError === true && value !== ''"
               slot="append"
               color="red">
         mdi-alert-circle-outline
@@ -28,24 +31,65 @@
 <script>
 export default {
   name: 'test-email',
+  props: {
+    value: {
+      type: String,
+      default: '',
+    },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    setError() {
+      let result;
+      if (this.error_event === true) {
+        result = true;
+      } else if (this.error === true) {
+        result = true;
+      } else {
+        result = false;
+      }
+      return result;
+    },
+  },
   data: () => ({
     rules: [
       (value) => !!value || 'Required.',
-      (value) => (value && value.length >= 3) || 'Min 3 characters',
+      (value) => (value && value.length >= 6) || 'Min 6 characters',
+      (value) => (value && value.length <= 254) || 'Max 254 characters',
       (value) => {
-        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const pattern = /^[^@]+@[^@]+\.[^@]+$/;
         return pattern.test(value) || 'Invalid e-mail.';
       },
     ],
     input_value: '',
-    error: true,
+    error_event: undefined,
     is_Focused: undefined,
   }),
 };
 </script>
 
 <style scoped lang="scss" >
-  div {
-    width: 300px;
+div {
+  width: 380px;
+  @media (max-width: 400px) {
+    width: 288px;
   }
+}
+.test-text-field-input ::v-deep .v-input__slot {
+  padding: 0 16px !important;
+  margin-bottom: 7px;
+  min-height: 54px;
+}
+.test-text-field-input ::v-deep .v-text-field__details {
+  padding: 0px 16px;
+}
+//.test-btn-input ::v-deep .v-btn__content {
+//  padding: 10px 26px;
+//}
+//.test-text-field-input ::v-deep fieldset {
+//  border: 1px solid #e4e4e4;
+//}
 </style>

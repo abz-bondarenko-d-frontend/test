@@ -3,14 +3,61 @@ import vuetify from '../plugins/vuetify';
 import TestName from '../components/test-name.vue';
 
 export default {
+  title: 'name',
   component: TestName,
-  title: 'Test name',
+  // argTypes: {
+  //   // onKeyDown: {
+  //   //   action: 'keydown',
+  //   // },
+  //   backgroundColor: { control: 'color' },
+  //   size: { control: { type: 'select', options: ['small', 'medium', 'large'] } },
+  // },
 };
 
-export const Default = () => ({
+const Template = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
   components: { TestName },
-  template: '<test-name></test-name>',
+  template: '<test-name v-bind="$props" v-on="$props"></test-name>',
 });
+
+export const Default = Template.bind({});
+Default.args = {
+  error: undefined,
+};
+
+export const Error = Template.bind({});
+Error.args = {
+  error: true,
+  value: 'e',
+};
+
+export const Success = Template.bind({});
+Success.args = {
+  error: false,
+  value: 'Success',
+};
+// export const Validated = Template.bind({});
+// Validated.args = {
+//   manual_validation: true,
+// };
+
+// export const OneLetter = Template.bind({});
+// OneLetter.args = {
+//   primary: true,
+// };
+
+// export default {
+//   component: TestName,
+//   title: 'Test name',
+// };
+//
+// export const Default = () => ({
+//   components: { TestName },
+//   template: '<test-name></test-name>',
+// });
+
+// export const Basic = () => <test-name>text('Label', 'hello')</test-name>;
+
 // import MyButton from './Button.vue';
 //
 // export default {
